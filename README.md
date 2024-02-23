@@ -1,8 +1,16 @@
-# React + Vite
+# Clay County Historical Maps Project
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is an assignment for a K-State course. The task assigned is to create a website for Clay County Historical Museum where visitors may look up specific lots and historical ownership within an interactive map.
 
-Currently, two official plugins are available:
+## Team
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Annie Aeschliman
+- Gabriel Guillen
+- Genessis Perez-Sorto
+- Logan Bunch
+- Sean wing
+- Teray Robinson
+
+## Stack
+
+Built with Vite and React
