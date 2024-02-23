@@ -1,16 +1,29 @@
+import { Link } from "react-router-dom";
+import { useState } from "react";
+
 export default function TopNav() {
-  const active = window.location.pathname;
+  const [active, setActive] = useState(window.location.pathname);
+
   return (
     <nav className="topnav">
-      <a className={active === "/" ? "active" : null} href="/">
+      <Link
+        className={active === "/" ? "active" : null}
+        onClick={() => setActive("/")}
+        to="/">
         Home
-      </a>
-      <a className={active === "/maps" ? "active" : null} href="/maps">
+      </Link>
+      <Link
+        className={active === "/maps" ? "active" : null}
+        onClick={() => setActive("/maps")}
+        to="/maps">
         Maps
-      </a>
-      <a className={active === "/records" ? "active" : null} href="/records">
+      </Link>
+      <Link
+        className={active === "/records" ? "active" : null}
+        onClick={() => setActive("/records")}
+        to="/records">
         Records
-      </a>
+      </Link>
       <input type="text" placeholder="Search.." />
     </nav>
   );
