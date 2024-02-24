@@ -3,14 +3,9 @@ import TopNav from "./components/TopNav.jsx";
 export default function Layout({ children }) {
   return (
     <>
-      <img
-        src="ccbanner.png"
-        alt="Clay County Museum"
-        height="350"
-        className="center"
-      />
+      <img src="ccbanner.png" alt="Clay County Museum" className="banner" />
       <TopNav />
-      {children}
+      <main>{children}</main>
       <footer>
         <p>Location: 518 Lincoln Ave, Clay Center, KS 67432 </p>
         <p>Hours: Tues-Sun 1-5PM </p>
