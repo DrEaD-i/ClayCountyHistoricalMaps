@@ -1,6 +1,9 @@
+import Layout from "../layout.jsx";
 
 export default function Records() {
   return (
-    <h1>Records Page</h1>
+    <Layout>
+      <h1>Records Page</h1>
+    </Layout>
   );
 }
