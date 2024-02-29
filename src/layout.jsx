@@ -1,9 +1,10 @@
 import TopNav from "./components/TopNav.jsx";
+import Banner from "./assets/ccbanner.png";
 
 export default function Layout({ children }) {
   return (
     <>
-      <img src="ccbanner.png" alt="Clay County Museum" className="banner" />
+      <img src={Banner} alt="Clay County Museum" className="banner" />
       <TopNav />
       <main>{children}</main>
       <footer>
