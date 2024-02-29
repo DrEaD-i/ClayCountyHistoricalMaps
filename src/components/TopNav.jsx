@@ -12,7 +12,7 @@ export default function TopNav() {
       <ul className="nav-list">
         <li>
           <Link
-            className={active === "" ? "active" : null}
+            className={active === "" || active === "/" ? "active" : null}
             onClick={() => setActive("")}
             to="/"
           >
