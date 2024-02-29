@@ -1,18 +1,21 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import './TopNav.css'
+import "./TopNav.css";
 
 export default function TopNav() {
-  const [active, setActive] = useState(window.location.pathname);
+  const [active, setActive] = useState(
+    window.location.pathname.replace("/ClayCountyHistoricalMaps", ""),
+  );
 
   return (
     <nav className="topnav">
       <ul className="nav-list">
         <li>
           <Link
-            className={active === "/" ? "active" : null}
-            onClick={() => setActive("/")}
-            to="/">
+            className={active === "" ? "active" : null}
+            onClick={() => setActive("")}
+            to="/"
+          >
             Home
           </Link>
         </li>
@@ -20,7 +23,8 @@ export default function TopNav() {
           <Link
             className={active === "/maps" ? "active" : null}
             onClick={() => setActive("/maps")}
-            to="/maps">
+            to="/maps"
+          >
             Maps
           </Link>
         </li>
@@ -28,7 +32,8 @@ export default function TopNav() {
           <Link
             className={active === "/records" ? "active" : null}
             onClick={() => setActive("/records")}
-            to="/records">
+            to="/records"
+          >
             Records
           </Link>
         </li>
