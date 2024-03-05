@@ -1,5 +1,6 @@
 import TopNav from "./components/TopNav.jsx";
 import Banner from "./assets/ccbanner.png";
+import "./layout.css";
 
 export default function Layout({ children }) {
   return (
