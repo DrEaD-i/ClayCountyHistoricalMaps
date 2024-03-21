@@ -1,6 +1,18 @@
 import Layout from "../layout.jsx";
+import { useEffect } from "react";
+import { client } from "../utils/client.js";
+
+async function testCall() {
+  const data = await client.execute("SELECT * FROM deeds limit 5")
+    .then((res) => console.log(res.rows))
+}
 
 export default function Home() {
+
+  useEffect(() => {
+    testCall()
+  }, [])
+
   return (
     <>
       <Layout>
