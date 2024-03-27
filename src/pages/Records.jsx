@@ -34,19 +34,19 @@ export default function Records() {
   const [page, setPage] = useState(1);
   const [results, setResults] = useState(null);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault()
     setLoading(true)
     setPage(1)
-    const newCount = await findCount(filter, query).then(res => setCount(res.rows[0][0]))
-    const response = await findRecords(filter, query, 1)
+    const newCount = findCount(filter, query).then(res => setCount(res.rows[0][0]))
+    const response = findRecords(filter, query, 1)
       .then(res => {
         setResults(res)
         setLoading(false)
       })
     window.history.pushState({}, "", window.location.origin + window.location.pathname + `?filter=${filter}&query=${query}&page=1`)
   }
-  const handlePage = async (e) => {
+  const handlePage = (e) => {
     setLoading(true)
     if (e.target.innerText === "<") {
       window.history.pushState({}, "", window.location.origin + window.location.pathname + `?filter=${filter}&query=${query}&page=${page - 1}`)
@@ -55,7 +55,7 @@ export default function Records() {
       window.history.pushState({}, "", window.location.origin + window.location.pathname + `?filter=${filter}&query=${query}&page=${page + 1}`)
       setPage(page + 1)
     }
-    const response = await findRecords(filter, query, page)
+    const response = findRecords(filter, query, page)
       .then(res => {
         setResults(res)
         setLoading(false)
