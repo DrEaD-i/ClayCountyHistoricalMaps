@@ -3,7 +3,6 @@ import Layout from "../layout.jsx";
 
 export default function Home() {
 
-  console.log(test)
 
   return (
     <>
