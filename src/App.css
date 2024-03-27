@@ -5,9 +5,12 @@ select {
 }
 
 table {
+  display: inline-block;
   border: 1px solid black;
   border-collapse: collapse;
   font-size: 1.2em;
+  max-width: 95dvw;
+  overflow: auto;
 }
 
 td,
