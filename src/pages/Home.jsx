@@ -1,13 +1,5 @@
 import Layout from "../layout.jsx";
-import { client } from "../utils/client.js";
 
-async function testCall() {
-  const data = await client.execute("SELECT * FROM deeds where SEC like '30' limit 10")
-    .then((res) => res.rows)
-  return data
-}
-
-const test = await testCall()
 
 export default function Home() {
 
