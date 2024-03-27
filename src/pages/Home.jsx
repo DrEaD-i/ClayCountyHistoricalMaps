@@ -1,17 +1,17 @@
 import Layout from "../layout.jsx";
-import { useEffect } from "react";
 import { client } from "../utils/client.js";
 
 async function testCall() {
-  const data = await client.execute("SELECT * FROM deeds limit 5")
-    .then((res) => console.log(res.rows))
+  const data = await client.execute("SELECT * FROM deeds where SEC like '30' limit 10")
+    .then((res) => res.rows)
+  return data
 }
+
+const test = await testCall()
 
 export default function Home() {
 
-  useEffect(() => {
-    testCall()
-  }, [])
+  console.log(test)
 
   return (
     <>
