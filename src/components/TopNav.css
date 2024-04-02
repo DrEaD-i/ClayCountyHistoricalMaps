@@ -2,7 +2,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: black;
+  background-color: #4b0303;
   font-size: 30px;
   min-height: 60px;
 }
@@ -12,7 +12,7 @@
   list-style-type: none;
   margin: 0;
   padding: 0;
-  background-color: black;
+  background-color: #4b0303;
   font-size: 30px;
 }
 
@@ -28,7 +28,7 @@
   text-decoration: none;
   font-size: 30px;
   padding: 0 16px;
-  background-color: black;
+  background-color: #4b0303;
 }
 
 .topnav a:hover {
@@ -38,7 +38,7 @@
 
 .topnav a.active {
   background-color: white;
-  color: darkblue;
+  color: rgb(53, 53, 53);
 }
 
 .topnav input[type="text"] {
