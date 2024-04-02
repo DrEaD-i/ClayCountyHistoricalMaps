@@ -7,11 +7,9 @@ async function findRecords(filter, query, page) {
   const offset = page ? (page - 1) * 15 : 0
   if (filter === "name") {
     const data = await client.execute(`SELECT * FROM deed WHERE ("LAST NAME GRANTOR_1" LIKE "%${query}%" OR "FIRST NAME GRANTOR_1" LIKE "%${query}%" OR "LAST NAME GRANTOR_2" LIKE "%${query}%" OR "FIRST NAME GRANTOR_2" LIKE "%${query}%" OR "LAST NAME GRANTOR 3" LIKE "%${query}%" OR "FIRST NAME GRANTOR 3" LIKE "%${query}%" OR "LAST NAME GRANTEE_1" LIKE "%${query}%" OR "FIRST NAME GRANTEE_1" LIKE "%${query}%" OR "LAST NAME GRANTEE_1" LIKE "%${query}%" OR "FIRST NAME GRANTEE_1" LIKE "%${query}%" OR "LAST NAME GRANTEE_2" LIKE "%${query}%" OR "FIRST NAME GRANTEE_2" LIKE "%${query}%") LIMIT 15 OFFSET ${offset}`)
-    const count = await client.execute(`SELECT COUNT(*) FROM deed WHERE ("LAST NAME GRANTOR_1" LIKE "%${query}%" OR "FIRST NAME GRANTOR_1" LIKE "%${query}%" OR "LAST NAME GRANTOR_2" LIKE "%${query}%" OR "FIRST NAME GRANTOR_2" LIKE "%${query}%" OR "LAST NAME GRANTOR 3" LIKE "%${query}%" OR "FIRST NAME GRANTOR 3" LIKE "%${query}%" OR "LAST NAME GRANTEE_1" LIKE "%${query}%" OR "FIRST NAME GRANTEE_1" LIKE "%${query}%" OR "LAST NAME GRANTEE_1" LIKE "%${query}%" OR "FIRST NAME GRANTEE_1" LIKE "%${query}%" OR "LAST NAME GRANTEE_2" LIKE "%${query}%" OR "FIRST NAME GRANTEE_2" LIKE "%${query}%")`)
     return data
   } else {
     const data = await client.execute(`SELECT * FROM deed WHERE ${filter} LIKE '%${query}%' LIMIT 15 OFFSET ${offset}`)
-    const count = await client.execute(`SELECT COUNT(*) FROM deed WHERE ${filter} LIKE '%${query}%'`)
     return data
   }
 }
@@ -85,7 +83,7 @@ export default function Records() {
   return (
     <Layout>
       <form onSubmit={e => handleSubmit(e)}>
-        <select name="filter" id="filter" class="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-2 focus:outline-none focus:ring-gray-300 font-medium rounded-sm text-md px-3 py-1 text-center me-2 mb-2 dark:border-gray-600 dark:text-black-800 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800" value={filter} onChange={(e) => setFilter(e.target.value)}>
+        <select name="filter" id="filter" className="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-2 focus:outline-none focus:ring-gray-300 font-medium rounded-sm text-md px-3 py-1 text-center me-2 mb-2 dark:border-gray-600 dark:text-black-800 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800" value={filter} onChange={(e) => setFilter(e.target.value)} required>
           <option value="">Select Option</option>
           <option value="SEC">Section</option>
           <option value="RGE">Range</option>
@@ -99,14 +97,14 @@ export default function Records() {
           <option value="name">Name</option>
           <option value="'APPLICATION #'">Application #</option>
         </select>
-        <input type="text" class="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-2 focus:outline-none focus:ring-gray-300 font-medium rounded-sm text-md px-3 py-1 text-center me-2 mb-2 dark:border-gray-600 dark:text-black-800 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800" name="query" id="query" value={query} onChange={(e) => setQuery(e.target.value)} />
-        <button type="submit" >Search</button>
+        <input type="text" className="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-2 focus:outline-none focus:ring-gray-300 font-medium rounded-sm text-md px-3 py-1 text-center me-2 mb-2 dark:border-gray-600 dark:text-black-800 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800" name="query" id="query" value={query} onChange={(e) => setQuery(e.target.value)} required />
+        <button type="submit" className="border border-gray-800 rounded-sm px-3 py-1 hover:bg-gray-600 text-gray-900 hover:text-white">Search</button>
       </form>
       {results ? (
         <div>
-          {(page === 1) ? null : <button onClick={(e) => handlePage(e)} type="button" class="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-1 focus:outline-none focus:ring-gray-300 font-medium rounded-sm text-sm px-3 py-1 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">&lt;</button>}
-          {page}
-          {(page === Math.ceil(count / 15)) ? null : <button onClick={(e) => handlePage(e)} type="button" class="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-1 focus:outline-none focus:ring-gray-300 font-medium rounded-sm text-sm px-3 py-1 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">&gt;</button>}
+          {(page === 1) ? null : <button onClick={(e) => handlePage(e)} type="button" className="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-1 focus:outline-none focus:ring-gray-300 font-medium rounded-sm text-sm px-3 py-1 text-center mx-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">&lt;</button>}
+          <span className="mx-1">{page}</span>
+          {(page === Math.ceil(count / 15)) ? null : <button onClick={(e) => handlePage(e)} type="button" className="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-1 focus:outline-none focus:ring-gray-300 font-medium rounded-sm text-sm px-3 py-1 text-center mx-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">&gt;</button>}
           of {Math.ceil(count / 15)}</div>
       ) : null}
 
