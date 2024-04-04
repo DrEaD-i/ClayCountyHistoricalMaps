@@ -6,7 +6,7 @@ This project is an assignment for a K-State course. The task assigned is to crea
 
 - Annie Aeschliman
 - Gabriel Guillen
-- Genessis Perez-Sorto
+- Genessis Perez-Sorto :D
 - Logan Bunch
 - Sean wing
 - Teray Robinson
