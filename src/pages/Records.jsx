@@ -24,6 +24,12 @@ async function findCount(filter, query) {
   }
 }
 
+export function PageButton({ content, handler }) {
+  return (
+    <button type="button" onClick={(e) => handler(e)} className="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-1 focus:outline-none focus:ring-gray-300 font-medium rounded-sm text-sm px-3 py-1 text-center mx-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">{content}</button>
+  )
+}
+
 export default function Records() {
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState('');
@@ -36,8 +42,8 @@ export default function Records() {
     e.preventDefault()
     setLoading(true)
     setPage(1)
-    const newCount = findCount(filter, query).then(res => setCount(res.rows[0][0]))
-    const response = findRecords(filter, query, 1)
+    findCount(filter, query).then(res => setCount(res.rows[0][0]))
+    findRecords(filter, query, 1)
       .then(res => {
         setResults(res)
         setLoading(false)
@@ -49,11 +55,15 @@ export default function Records() {
     if (e.target.innerText === "<") {
       window.history.pushState({}, "", window.location.origin + window.location.pathname + `?filter=${filter}&query=${query}&page=${page - 1}`)
       setPage(page - 1)
-    } else {
+    } else if (e.target.innerText === ">") {
       window.history.pushState({}, "", window.location.origin + window.location.pathname + `?filter=${filter}&query=${query}&page=${page + 1}`)
-      setPage(page + 1)
+      setPage(parseInt(page) + 1)
+    } else {
+      window.history.pushState({}, "", window.location.origin + window.location.pathname + `?filter=${filter}&query=${query}&page=${e.target.innerText}`)
+      setPage(e.target.innerText)
     }
-    const response = findRecords(filter, query, page)
+
+    findRecords(filter, query, page)
       .then(res => {
         setResults(res)
         setLoading(false)
@@ -67,7 +77,7 @@ export default function Records() {
       const query = params.get("query")
       const page = params.get("page")
       findCount(filter, query).then(res => setCount(res.rows[0][0]))
-      const results = findRecords(filter, query, page)
+      findRecords(filter, query, page)
         .then(res => {
           setResults(res)
           console.log(res)
@@ -102,10 +112,16 @@ export default function Records() {
       </form>
       {results ? (
         <div>
-          {(page === 1) ? null : <button onClick={(e) => handlePage(e)} type="button" className="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-1 focus:outline-none focus:ring-gray-300 font-medium rounded-sm text-sm px-3 py-1 text-center mx-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">&lt;</button>}
+          {(page === 1) ? null : <PageButton handler={handlePage} content="&lt;" />}
+          {(page > 2) ? <PageButton handler={handlePage} content={1} /> : null}
+          {(page > 3) ? <span className="mx-1">...</span> : null}
+          {(page > 1) ? <PageButton handler={handlePage} content={page - 1} /> : null}
           <span className="mx-1">{page}</span>
-          {(page === Math.ceil(count / 15)) ? null : <button onClick={(e) => handlePage(e)} type="button" className="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-1 focus:outline-none focus:ring-gray-300 font-medium rounded-sm text-sm px-3 py-1 text-center mx-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">&gt;</button>}
-          of {Math.ceil(count / 15)}</div>
+          {(page < Math.ceil(count / 15)) ? <PageButton handler={handlePage} content={parseInt(page) + 1} /> : null}
+          {(page < Math.ceil(count / 15) - 1) ? <span className="mx-1">...</span> : null}
+          {(page < Math.ceil(count / 15)) ? <PageButton handler={handlePage} content={Math.ceil(count / 15)} /> : null}
+          {(page === Math.ceil(count / 15)) ? null : <PageButton handler={handlePage} content="&gt;" />}
+        </div>
       ) : null}
 
       <table>
