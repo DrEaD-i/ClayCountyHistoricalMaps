@@ -1,4 +1,5 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
+import InfoBox from './InfoBox';
 import map1 from '../assets/map1.jpg';
 import './MapCanvas.css';
 import { regions as regionArr } from './regions.js';
@@ -14,13 +15,14 @@ function drawRegion(canvas, region) {
   return path
 }
 
-function createRegion(canvas, ctx, region, img) {
+function createRegion(canvas, ctx, region, img, state) {
   const path = drawRegion(canvas, region)
   canvas.addEventListener("mousemove", (e) => {
     if (ctx.isPointInPath(path, e.offsetX, e.offsetY)) {
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
       ctx.fillStyle = "rgba(0,100,0,0.3)"
       ctx.fill(path)
+      state(region.name)
     }
   })
 }
@@ -28,6 +30,8 @@ function createRegion(canvas, ctx, region, img) {
 
 export default function MapCanvas() {
   const canvasRef = useRef(null);
+
+  const [selectedCity, setSelectedCity] = useState(null);
 
 
   useEffect(() => {
@@ -56,7 +60,7 @@ export default function MapCanvas() {
       ctx.drawImage(img, 0, 0, newWidth, newHeight);
 
       regionArr.forEach((region) => {
-        createRegion(canvas, ctx, region, img)
+        createRegion(canvas, ctx, region, img, setSelectedCity)
       })
 
     };
@@ -78,7 +82,14 @@ export default function MapCanvas() {
 
   }, []);
 
+
   return (
-    <canvas ref={canvasRef} width={1000} height={1000} />
+    <>
+      <div className="flex">
+        <canvas ref={canvasRef} width={1000} height={1000} />
+        <InfoBox city={selectedCity} />
+      </div>
+    </>
   );
+
 }
