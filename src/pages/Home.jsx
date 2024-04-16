@@ -7,45 +7,20 @@ export default function Home() {
   return (
     <>
       <Layout>
-        <h1>Home Page</h1>
+        <h1><b>Instructions</b></h1>
         <p>
-          Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit
-          enim labore culpa sint ad nisi Lorem pariatur mollit ex esse
-          exercitation amet. Nisi anim cupidatat excepteur officia.
-          Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate
-          voluptate dolor minim nulla est proident. Nostrud officia pariatur ut
-          officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit
-          commodo officia dolor Lorem duis laboris cupidatat officia voluptate.
-          Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis
-          officia eiusmod. Aliqua reprehenderit commodo ex non excepteur duis
-          sunt velit enim. Voluptate laboris sint cupidatat ullamco ut ea
-          consectetur et est culpa et culpa duis.
+          Welcome to the Maps and Records tools! These are interactive pages that will help you find
+          historical records about legal land descriptions within Clay County.
         </p>
         <p>
-          Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit
-          enim labore culpa sint ad nisi Lorem pariatur mollit ex esse
-          exercitation amet. Nisi anim cupidatat excepteur officia.
-          Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate
-          voluptate dolor minim nulla est proident. Nostrud officia pariatur ut
-          officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit
-          commodo officia dolor Lorem duis laboris cupidatat officia voluptate.
-          Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis
-          officia eiusmod. Aliqua reprehenderit commodo ex non excepteur duis
-          sunt velit enim. Voluptate laboris sint cupidatat ullamco ut ea
-          consectetur et est culpa et culpa duis.
+          To see a visual representation of each township,simply click on the "Maps" tab on the 
+          navigation bar. Then, click on the township you'd like to view. On the right, you'll see 
+          more information and historical records.
         </p>
         <p>
-          Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit
-          enim labore culpa sint ad nisi Lorem pariatur mollit ex esse
-          exercitation amet. Nisi anim cupidatat excepteur officia.
-          Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate
-          voluptate dolor minim nulla est proident. Nostrud officia pariatur ut
-          officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit
-          commodo officia dolor Lorem duis laboris cupidatat officia voluptate.
-          Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis
-          officia eiusmod. Aliqua reprehenderit commodo ex non excepteur duis
-          sunt velit enim. Voluptate laboris sint cupidatat ullamco ut ea
-          consectetur et est culpa et culpa duis.
+          To view by various categories of legal land descriptions, click the "Records" tab on the
+          navigation bar. From here, you can select the descriptor and numerical values of the legal
+          land description you'd like to view. 
         </p>
       </Layout>
     </>
