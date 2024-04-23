@@ -17,14 +17,20 @@ function drawRegion(canvas, region) {
 }
 
 // takes the canvas reference, context, region object, map image reference, and a state setter function. The drawRegion is called to create a named Path object. The canvas will listen to a mousemove event and check that the pointer is within the path. If so, it will draw the map green and prompt an info box to populate with the city info.
-function createRegion(canvas, ctx, region, img, state) {
+function createRegion(canvas, ctx, region, img, selectedCity, setSelectedCity) {
   const path = drawRegion(canvas, region)
   canvas.addEventListener("mousemove", (e) => {
     if (ctx.isPointInPath(path, e.offsetX, e.offsetY)) {
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
       ctx.fillStyle = "rgba(0,100,0,0.3)"
       ctx.fill(path)
-      state(region.name)
+    }
+  })
+  canvas.addEventListener("mousedown", (e) => {
+    if (ctx.isPointInPath(path, e.offsetX, e.offsetY)) {
+      if (selectedCity !== region.name) {
+        setSelectedCity(region.name)
+      }
     }
   })
 }
@@ -66,33 +72,17 @@ export default function MapCanvas() {
       ctx.drawImage(img, 0, 0, newWidth, newHeight);
 
       regionArr.forEach((region) => {
-        createRegion(canvas, ctx, region, img, setSelectedCity)
+        createRegion(canvas, ctx, region, img, selectedCity, setSelectedCity)
       })
 
     };
-
-    // temporary code to get the points for each region
-    const points = []
-    canvas.addEventListener('click', (e) => {
-      const rect = canvas.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      const percentageX = (x / canvas.offsetWidth) * 100;
-      const percentageY = (y / canvas.offsetHeight) * 100;
-
-      points.push({ x: percentageX, y: percentageY })
-      console.log(JSON.stringify(points))
-    })
-
-
   }, []);
-
 
   return (
     <>
       <div className="flex">
-        <canvas ref={canvasRef} width={1000} height={1000} />
         <InfoBox city={selectedCity} />
+        <canvas ref={canvasRef} width={1000} height={1000} />
       </div>
     </>
   );
