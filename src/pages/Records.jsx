@@ -218,7 +218,7 @@ export default function Records() {
 
   return (
     <Layout>
-      <div className="flex max-w-[95dvw] pt-1">
+      <div className="flex w-[95dvw] pt-1 justify-between">
         <form onSubmit={e => handleSubmit(e)} className="max-w-[20dvw]">
           <span className="font-bold text-lg">
             Search by:
@@ -258,7 +258,7 @@ export default function Records() {
             </div>
           ) : null}
 
-          <table>
+          <table className="max-w-[75dvw]">
             {loading ? <thead><tr><th>Loading...</th></tr></thead> : (
               <>
                 <thead>
@@ -283,6 +283,7 @@ export default function Records() {
             )}
           </table>
         </div>
+        <div></div>
       </div>
     </Layout>
   );
