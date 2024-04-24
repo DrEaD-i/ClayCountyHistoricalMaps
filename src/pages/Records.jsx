@@ -9,10 +9,17 @@ import { findCount, findRecords } from "../utils/client.js";
 // Simple reusable button component to handle the pagination of the results table.
 function PageButton({ content, handler }) {
   return (
-    <button type="button" onClick={(e) => handler(e)} className="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-1 focus:outline-none focus:ring-gray-300 font-medium rounded-sm text-sm px-3 py-1 text-center mx-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">{content}</button>
+    <button
+      type="button"
+      onClick={(e) => handler(e)}
+      className="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-1 focus:outline-none focus:ring-gray-300 font-medium rounded-sm text-sm px-3 py-1 text-center mx-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800"
+    >
+      {content}
+    </button>
   )
 }
 
+// Search box used for the name and application id search fields
 function Search({ type, value, setValue }) {
   return (
     <div>
@@ -75,7 +82,12 @@ function Filter({ filter, filterList, updateFilterList }) {
               ))
             }
             <li>
-              <button onClick={(e) => handleShowMore(e, false)} className="text-blue-600 text-sm hover:underline">^Show Less</button>
+              <button
+                onClick={(e) => handleShowMore(e, false)}
+                className="text-blue-600 text-sm hover:underline"
+              >
+                ^Show Less
+              </button>
             </li>
           </>
         ) : (
@@ -95,7 +107,12 @@ function Filter({ filter, filterList, updateFilterList }) {
               ))
             }
             <li>
-              <button onClick={(e) => handleShowMore(e, true)} className="text-blue-600 text-sm hover:underline">&gt;Show More</button>
+              <button
+                onClick={(e) => handleShowMore(e, true)}
+                className="text-blue-600 text-sm hover:underline"
+              >
+                &gt;Show More
+              </button>
             </li>
           </>
         )}
@@ -179,11 +196,7 @@ export default function Records() {
       })
   }
 
-  useEffect(() => {
-    // console.log(filters)
-  }, [filters])
-
-  // checks url for filter, query and page. If they exist, it finds the count of records based on the filter and query, and finds the records based on the filter, query and page.
+  // checks url for url search params and page number. If they exist, it finds the count of records based on the params, and finds the records based on the params and page.
   useEffect(() => {
     if (window.location.search) {
       const params = new URLSearchParams(window.location.search)
@@ -228,7 +241,12 @@ export default function Records() {
             --OR--
           </span>
           <Search type="Application ID" value={appId} setValue={setAppId} />
-          <input type="button" value="Search" onClick={e => handleSubmit(e)} className="text-black hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-1 focus:outline-none focus:ring-gray-300 font-medium rounded-sm text-sm px-3 py-1 text-center mx-2 mb-2" />
+          <input
+            type="button"
+            value="Search"
+            onClick={e => handleSubmit(e)}
+            className="text-black hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-1 focus:outline-none focus:ring-gray-300 font-medium rounded-sm text-sm px-3 py-1 text-center mx-2 mb-2"
+          />
           <div className="font-bold text-lg">
             Filters:
           </div>
@@ -241,7 +259,12 @@ export default function Records() {
                 key={index} />
             ))}
           </div>
-          <input type="button" value="Apply Filter" onClick={e => handleSubmit(e)} className="text-black hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-1 focus:outline-none focus:ring-gray-300 font-medium rounded-sm text-sm px-3 py-1 text-center mx-2 mb-2" />
+          <input
+            type="button"
+            value="Apply Filter"
+            onClick={e => handleSubmit(e)}
+            className="text-black hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-1 focus:outline-none focus:ring-gray-300 font-medium rounded-sm text-sm px-3 py-1 text-center mx-2 mb-2"
+          />
         </form>
         <div className="flex flex-col items-center justify-center ml-3">
           {results ? (
@@ -283,7 +306,7 @@ export default function Records() {
             )}
           </table>
         </div>
-        <div></div>
+        <div>{/* This is a dummy div. Its only purpose is to keep the other sibling divs in the desired position. This wouldn't be needed with a proper application of a css grid */}</div>
       </div>
     </Layout>
   );
