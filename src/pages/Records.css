@@ -1,0 +1,13 @@
+table {
+  display: inline-block;
+  border: 1px solid black;
+  border-collapse: collapse;
+  font-size: 1.2em;
+  overflow: auto;
+}
+
+td,
+th {
+  border: 1px solid black;
+  padding: 0.5em;
+}

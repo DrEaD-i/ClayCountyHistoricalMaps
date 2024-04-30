@@ -1,59 +1,122 @@
 import Layout from "../layout.jsx";
+import './Records.css';
 import { useState, useEffect } from "react";
+import { distinct } from "../components/distinct.js";
 import { v4 as uuidv4 } from "uuid";
-import { client } from "../utils/client.js";
+import { findCount, findRecords } from "../utils/client.js";
 
-// This function is used to find records in the database based on the filter and query provided
-async function findRecords(filter, query, page) {
-  const offset = page ? (page - 1) * 15 : 0
-  if (filter === "name") {
-    const data = await client.execute(`SELECT * FROM deed WHERE ("LAST NAME GRANTOR_1" LIKE "%${query}%" OR "FIRST NAME GRANTOR_1" LIKE "%${query}%" OR "LAST NAME GRANTOR_2" LIKE "%${query}%" OR "FIRST NAME GRANTOR_2" LIKE "%${query}%" OR "LAST NAME GRANTOR 3" LIKE "%${query}%" OR "FIRST NAME GRANTOR 3" LIKE "%${query}%" OR "LAST NAME GRANTEE_1" LIKE "%${query}%" OR "FIRST NAME GRANTEE_1" LIKE "%${query}%" OR "LAST NAME GRANTEE_1" LIKE "%${query}%" OR "FIRST NAME GRANTEE_1" LIKE "%${query}%" OR "LAST NAME GRANTEE_2" LIKE "%${query}%" OR "FIRST NAME GRANTEE_2" LIKE "%${query}%") LIMIT 15 OFFSET ${offset}`)
-    return data
-  } else {
-    const data = await client.execute(`SELECT * FROM deed WHERE ${filter} LIKE '%${query}%' LIMIT 15 OFFSET ${offset}`)
-    return data
-  }
-}
-
-// This function is used to find the count of records in the database based on the filter and query provided
-async function findCount(filter, query) {
-  if (filter === "name") {
-    const count = await client.execute(`SELECT COUNT(*) FROM deed WHERE ("LAST NAME GRANTOR_1" LIKE "%${query}%" OR "FIRST NAME GRANTOR_1" LIKE "%${query}%" OR "LAST NAME GRANTOR_2" LIKE "%${query}%" OR "FIRST NAME GRANTOR_2" LIKE "%${query}%" OR "LAST NAME GRANTOR 3" LIKE "%${query}%" OR "FIRST NAME GRANTOR 3" LIKE "%${query}%" OR "LAST NAME GRANTEE_1" LIKE "%${query}%" OR "FIRST NAME GRANTEE_1" LIKE "%${query}%" OR "LAST NAME GRANTEE_1" LIKE "%${query}%" OR "FIRST NAME GRANTEE_1" LIKE "%${query}%" OR "LAST NAME GRANTEE_2" LIKE "%${query}%" OR "FIRST NAME GRANTEE_2" LIKE "%${query}%")`)
-    return count
-  } else {
-    const count = await client.execute(`SELECT COUNT(*) FROM deed WHERE ${filter} LIKE '%${query}%'`)
-    return count
-  }
-}
 
 // Simple reusable button component to handle the pagination of the results table.
 function PageButton({ content, handler }) {
   return (
-    <button type="button" onClick={(e) => handler(e)} className="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-1 focus:outline-none focus:ring-gray-300 font-medium rounded-sm text-sm px-3 py-1 text-center mx-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">{content}</button>
+    <button
+      type="button"
+      onClick={(e) => handler(e)}
+      className="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-1 focus:outline-none focus:ring-gray-300 font-medium rounded-sm text-sm px-3 py-1 text-center mx-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800"
+    >
+      {content}
+    </button>
+  )
+}
+
+// Search box used for the name and application id search fields
+function Search({ type, value, setValue }) {
+  return (
+    <div>
+      <label htmlFor={type}>{type}</label>
+      <input
+        type="text"
+        name={type}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        className="border border-gray-800 focus:ring-1 focus:outline-none focus:ring-gray-300 font-medium rounded-sm text-sm px-3 py-1 text-center mx-2 mb-2"
+      />
+    </div>
   )
 }
 
 // Component to handle the filter and query input fields
-function Filter({ filter, setFilter, query, setQuery }) {
+function Filter({ filter, filterList, updateFilterList }) {
+  const [checkedState, setCheckedState] = useState(new Array(filter.data.length).fill(false))
+  const [showMore, setShowMore] = useState(false)
+
+  const handleCheckboxChange = (position) => {
+    const updatedCheckedState = checkedState.map((item, index) =>
+      index === position ? !item : item
+    );
+    setCheckedState(updatedCheckedState);
+  }
+
+  const handleShowMore = (e, show) => {
+    e.preventDefault()
+    setShowMore(show)
+  }
+
+  useEffect(() => {
+    const checked = {
+      filter: filter.filter,
+      data: checkedState.map((item, index) => item ? filter.data[index] : null).filter(item => item !== null)
+    }
+    updateFilterList([...filterList].filter(item => item.filter !== filter.filter).concat(checked))
+
+  }, [checkedState])
 
   return (
     <>
-      <select name="filter" id="filter" className="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-2 focus:outline-none focus:ring-gray-300 font-medium rounded-sm text-md px-3 py-1 text-center me-2 mb-2 dark:border-gray-600 dark:text-black-800 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800" value={filter} onChange={(e) => setFilter(e.target.value)} required>
-        <option value="">Select Option</option>
-        <option value="SEC">Section</option>
-        <option value="RGE">Range</option>
-        <option value="BK">Book</option>
-        <option value="BLK">Block</option>
-        <option value="CITY">City</option>
-        <option value="LOT">Lot</option>
-        <option value="QTR">Quarter</option>
-        <option value="TSP">Township</option>
-        <option value="TYPE">Type</option>
-        <option value="name">Name</option>
-        <option value="'APPLICATION #'">Application #</option>
-      </select>
-      <input type="text" className="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-2 focus:outline-none focus:ring-gray-300 font-medium rounded-sm text-md px-3 py-1 text-center me-2 mb-2 dark:border-gray-600 dark:text-black-800 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800" name="query" id="query" value={query} onChange={(e) => setQuery(e.target.value)} required />
-      <button type="submit" className="border border-gray-800 rounded-sm px-3 py-1 hover:bg-gray-600 text-gray-900 hover:text-white">Search</button>
+      <ul>
+        <span className="font-bold">{filter.name}</span>
+        {showMore ? (
+          <>
+            {
+              filter.data.map((option, index) => (
+                <li key={option + "-" + index}>
+                  <input
+                    type="checkbox"
+                    name={filter.name + option}
+                    value={option}
+                    checked={checkedState[index]}
+                    onChange={() => handleCheckboxChange(index)}
+                  />
+                  <label htmlFor={filter.name + option}>{option}</label>
+                </li>
+              ))
+            }
+            <li>
+              <button
+                onClick={(e) => handleShowMore(e, false)}
+                className="text-blue-600 text-sm hover:underline"
+              >
+                ^Show Less
+              </button>
+            </li>
+          </>
+        ) : (
+          <>
+            {
+              filter.data.slice(0, 5).map((option, index) => (
+                <li key={option + "-" + index}>
+                  <input
+                    type="checkbox"
+                    name={filter.name + option}
+                    value={option}
+                    checked={checkedState[index]}
+                    onChange={() => handleCheckboxChange(index)}
+                  />
+                  <label htmlFor={filter.name + option}>{option}</label>
+                </li>
+              ))
+            }
+            <li>
+              <button
+                onClick={(e) => handleShowMore(e, true)}
+                className="text-blue-600 text-sm hover:underline"
+              >
+                &gt;Show More
+              </button>
+            </li>
+          </>
+        )}
+      </ul>
     </>
   )
 }
@@ -61,8 +124,9 @@ function Filter({ filter, setFilter, query, setQuery }) {
 // main component
 export default function Records() {
   const [loading, setLoading] = useState(false);
-  const [filter, setFilter] = useState('');
-  const [query, setQuery] = useState('');
+  const [filters, setFilters] = useState(new Array())
+  const [name, setName] = useState("")
+  const [appId, setAppId] = useState("")
   const [count, setCount] = useState(null);
   const [page, setPage] = useState(1);
   const [results, setResults] = useState(null);
@@ -72,52 +136,94 @@ export default function Records() {
     e.preventDefault()
     setLoading(true)
     setPage(1)
-    findCount(filter, query).then(res => setCount(res.rows[0][0]))
-    findRecords(filter, query, 1)
+    findCount(name, appId, filters).then(res => setCount(res.rows[0][0]))
+    findRecords(name, appId, filters, 1)
       .then(res => {
         setResults(res)
         setLoading(false)
       })
-    window.history.pushState({}, "", window.location.origin + window.location.pathname + `?filter=${filter}&query=${query}&page=1`)
+    const queryArray = []
+    if (name !== "") {
+      queryArray.push(`name=${name}`)
+    }
+    if (appId !== "") {
+      queryArray.push(`&appId=${appId}`)
+    }
+    if (filters.length > 0) {
+      queryArray.push(`${filters.map(filter => {
+        if (filter.data.length > 0) {
+          return `${filter.filter}=${filter.data}`
+        }
+      }).join("&")}`)
+    }
+    const queryString = queryArray.join("&")
+    window.history.pushState({}, "", window.location.origin + window.location.pathname + "?" + queryString + `&page=${page}`)
   }
 
   // handles the page change. It sets the loading state to true, updates the url with the filter, query and page, and finds the records based on the filter, query and page.
   const handlePage = (e) => {
     setLoading(true)
+    const queryArray = []
+    if (name !== "") {
+      queryArray.push(`name=${name}`)
+    }
+    if (appId !== "") {
+      queryArray.push(`&appId=${appId}`)
+    }
+    if (filters.length > 0) {
+      queryArray.push(`${filters.map(filter => {
+        if (filter.data.length > 0) {
+          return `${filter.filter}=${filter.data}`
+        }
+      }).join("&")}`)
+    }
+    const queryString = queryArray.join("&")
     if (e.target.innerText === "<") {
-      window.history.pushState({}, "", window.location.origin + window.location.pathname + `?filter=${filter}&query=${query}&page=${page - 1}`)
-      setPage(page - 1)
+      window.history.pushState({}, "", window.location.origin + window.location.pathname + queryString + `&page=${page - 1}`)
+      setPage(parseInt(page) - 1)
     } else if (e.target.innerText === ">") {
-      window.history.pushState({}, "", window.location.origin + window.location.pathname + `?filter=${filter}&query=${query}&page=${page + 1}`)
+      window.history.pushState({}, "", window.location.origin + window.location.pathname + queryString + `&page=${page + 1}`)
       setPage(parseInt(page) + 1)
     } else {
-      window.history.pushState({}, "", window.location.origin + window.location.pathname + `?filter=${filter}&query=${query}&page=${e.target.innerText}`)
+      window.history.pushState({}, "", window.location.origin + window.location.pathname + queryString + `&page=${e.target.innerText}`)
       setPage(e.target.innerText)
     }
 
-    findRecords(filter, query, page)
+    findRecords(name, appId, filters, page)
       .then(res => {
         setResults(res)
         setLoading(false)
       })
   }
 
-  // checks url for filter, query and page. If they exist, it finds the count of records based on the filter and query, and finds the records based on the filter, query and page.
+  // checks url for url search params and page number. If they exist, it finds the count of records based on the params, and finds the records based on the params and page.
   useEffect(() => {
     if (window.location.search) {
       const params = new URLSearchParams(window.location.search)
-      const filter = params.get("filter")
-      const query = params.get("query")
-      const page = params.get("page")
-      findCount(filter, query).then(res => setCount(res.rows[0][0]))
-      findRecords(filter, query, page)
+      const localName = params.get("name")
+      const localAppId = params.get("appId")
+      const filterArray = distinct.map(filter => {
+        if (params.get(filter.filter) !== null) {
+          const filterData = {
+            filter: filter.filter,
+            data: params.get(filter.filter).split(',')
+          }
+          return filterData
+        }
+      })
+      const localFilters = filterArray.filter(item => item)
+      console.log(filters)
+      const page = parseInt(params.get("page"))
+      localName && setName(localName)
+      localAppId && setAppId(localAppId)
+      localFilters && setFilters(localFilters)
+      findCount(localName, localAppId, localFilters).then(res => setCount(res.rows[0][0]))
+      findRecords(localName, localAppId, localFilters, page)
         .then(res => {
           setResults(res)
           console.log(res)
         })
 
-      setFilter(filter)
-      setQuery(query)
       setPage(parseInt(page))
     }
   }, [])
@@ -125,11 +231,42 @@ export default function Records() {
 
   return (
     <Layout>
-      <div className="flex max-w-[95dvw]">
-        <form onSubmit={e => handleSubmit(e)}>
-          <Filter filter={filter} setFilter={setFilter} query={query} setQuery={setQuery} />
+      <div className="flex w-[95dvw] pt-1 justify-between">
+        <form onSubmit={e => handleSubmit(e)} className="max-w-[20dvw]">
+          <span className="font-bold text-lg">
+            Search by:
+          </span>
+          <Search type="Name" value={name} setValue={setName} />
+          <span className="font-bold text-lg">
+            --OR--
+          </span>
+          <Search type="Application ID" value={appId} setValue={setAppId} />
+          <input
+            type="button"
+            value="Search"
+            onClick={e => handleSubmit(e)}
+            className="text-black hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-1 focus:outline-none focus:ring-gray-300 font-medium rounded-sm text-sm px-3 py-1 text-center mx-2 mb-2"
+          />
+          <div className="font-bold text-lg">
+            Filters:
+          </div>
+          <div className="max-h-[50dvh] overflow-y-auto">
+            {distinct.map((item, index) => (
+              <Filter
+                filter={item}
+                filterList={filters}
+                updateFilterList={setFilters}
+                key={index} />
+            ))}
+          </div>
+          <input
+            type="button"
+            value="Apply Filter"
+            onClick={e => handleSubmit(e)}
+            className="text-black hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-1 focus:outline-none focus:ring-gray-300 font-medium rounded-sm text-sm px-3 py-1 text-center mx-2 mb-2"
+          />
         </form>
-        <div className="flex flex-col align-middle justify-center ml-3">
+        <div className="flex flex-col items-center justify-center ml-3">
           {results ? (
             <div>
               {(page === 1) ? null : <PageButton handler={handlePage} content="&lt;" />}
@@ -144,7 +281,7 @@ export default function Records() {
             </div>
           ) : null}
 
-          <table>
+          <table className="max-w-[75dvw]">
             {loading ? <thead><tr><th>Loading...</th></tr></thead> : (
               <>
                 <thead>
@@ -169,6 +306,7 @@ export default function Records() {
             )}
           </table>
         </div>
+        <div>{/* This is a dummy div. Its only purpose is to keep the other sibling divs in the desired position. This wouldn't be needed with a proper application of a css grid */}</div>
       </div>
     </Layout>
   );

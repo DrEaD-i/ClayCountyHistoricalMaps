@@ -38,7 +38,6 @@ export default function TopNav() {
           </Link>
         </li>
       </ul>
-      <input type="text" placeholder="Search.." />
     </nav>
   );
 }
