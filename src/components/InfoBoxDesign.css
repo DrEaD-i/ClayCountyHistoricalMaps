@@ -1,0 +1,14 @@
+.InfoBoxDesign{
+border: 10px;
+border-style: double;
+border-color: black;
+text-align: center;
+-webkit-text-stroke: .25px;
+-webkit-text-stroke-color: black;
+font-family: 'Times New Roman', Times, serif;
+font-size: 24px;
+text-decoration: underline;
+position:fixed;
+left: 75%;
+bottom:50%;
+}
