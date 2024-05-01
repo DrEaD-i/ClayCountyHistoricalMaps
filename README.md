@@ -13,14 +13,13 @@ This project is an assignment for a K-State course. The task assigned is to crea
 
 ## Stack
 
-
 - Vite
 - React
 - Tailwind
 
 Deployed on GitHub Pages
 
-Visit the running prototype at [https://logno-devf.github.io/ClayCountyHistoricalMaps/](https://logno-devf.github.io/ClayCountyHistoricalMaps/)
+Visit the running prototype at [https://logno-dev.github.io/ClayCountyHistoricalMaps/](https://logno-dev.github.io/ClayCountyHistoricalMaps/)
 
 ## Install
 
@@ -51,4 +50,3 @@ Reusable components such as the `TopNav.jsx` are found in `src/components`.
 Currently the only utility is the bit of code that connects to the database. This can be found in `src/utils`.
 
 Static assets are stored in `public` and dynamic assets are stored in `src/assets`.
-
